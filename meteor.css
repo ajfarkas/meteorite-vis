@@ -1,0 +1,69 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+.hidden { display: none; }
+
+#worldView,
+nav { float: left; }
+
+nav ul {
+  list-style: none;
+}
+nav li {
+  cursor: pointer;
+}
+
+#worldView {
+  position: relative;
+  width: 100vmin;
+  height: 100vmin;
+}
+
+svg { 
+  position: relative;
+  background-color: black;
+}
+
+text {
+  fill: white;
+  font-size: .4px;
+  text-anchor: middle;
+}
+
+.water { fill: #3e3e3e;}
+
+.land {
+  fill: #1a1a1a;
+  /*stroke-width: .05;*/
+  /*stroke: black;*/
+}
+
+.urban { fill: gold; }
+
+/*.regions { fill: black; }*/
+
+.city { 
+  stroke-width: .1;
+  stroke: white;
+  fill: none;
+}
+.country {
+  stroke-width: .1;
+  stroke: #999;
+  fill: none;
+  /*fill: #2b2b2b;*/
+}
+
+.meteor {
+  fill: rgba(0, 255, 245, 0.3);
+}
+.meteor.interest {
+  fill: rgba(255, 245, 0, 0.3);
+}
+
+option[value=""] {
+    color: #c3c3c3;
+}

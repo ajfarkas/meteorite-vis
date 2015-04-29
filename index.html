@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Meteorites</title>
+<link href="meteor.css" type="text/css" rel="stylesheet">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<body>
+  <section id="worldView"></section>
+  <nav>
+    <form id='city-form'></form>
+    <form id='country-form'></form>
+    <form id='distance-form'>
+      <fieldset>
+        <label>
+          Meteorites within
+          <input type="number" name="distance" value="500" placeholder="500"></input>
+          <select>
+            <option value="mi" selected="true">mi</option>
+            <option value="km">km</option>
+          </select> 
+        </label>
+        <button type="button">update</button>
+      </fieldset>
+    </form>
+    <div class="info"></div>
+  </nav>
+</body>
+<script src="meteoriteBundle.js"></script>
