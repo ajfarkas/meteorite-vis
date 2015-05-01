@@ -1,0 +1,6 @@
+#Dirs
+~Tut/
+.sass-cache/
+BigJSON:shapes/
+json50/
+node_modules/

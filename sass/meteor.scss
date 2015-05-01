@@ -1,0 +1,215 @@
+@import "vars";
+@import "mixins";
+
+/*TESTING*/
+body { background: black;}
+#info { background: white;}
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+html { font-size: 62.5%; }
+
+body {
+  position: relative;
+  min-height: 100%;
+  font-family: Roboto, sans-serif;
+  font-size: $body-font;
+}
+
+ul { list-style: none; }
+
+.hidden { visibility: hidden; }
+
+/* FORMS & BUTTONS ------------------------------------------------------*/
+#info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: $info-width;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px 0;
+}
+#info,
+#info > * { display: inline-block; }
+
+p.menu { font-size: $info-font * 6 / 7; }
+
+select, button {
+	cursor: pointer;
+}
+
+#country-form,
+#city-form { 
+  margin-left: 11.1 - $info-font * 5.5;
+  min-width: $info-font * 12.5;
+  min-height: $info-font * 1.5;
+}
+#country-form:after,
+#city-form:after,
+#distance-form label:after {
+  content: " ";
+  display: inline-block;
+  width: 10px;
+  background: white;
+  height: 11px;
+  margin-left: -16px;
+  margin-bottom: -1px;
+}
+#distance-form {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 0;
+  margin-top: 1.0rem;
+}
+
+select {
+  background: white;
+  border: none;
+  outline: 3px solid white;
+  outline-offset: -3px;
+  font-size: $info-font;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: $select-color;
+
+  &:active { text-transform: initial; }
+	&:focus {
+	  text-decoration: none;
+	  box-shadow: inset 0 -4px 0 0 crimson;
+	}
+}
+form:nth-last-of-type(n+2) select {
+  width: $info-font * 12.45;
+}
+
+
+option[value=""] {
+    color: #c3c3c3;
+}
+
+fieldset { 
+	border: none; 
+
+	& input {
+	  width: 4.8rem;
+	  margin-left: $info-font * 0.33;
+	  border: none;
+	  box-shadow: inset 0 -1px 0 0 black;
+	  text-align: right;
+	  /*hide arrows*/
+	  overflow: hidden;
+	  margin-right: $info-font * -1.17;
+	}
+
+	& select :focus {
+		box-shadow: inset 0 -4px 0 0 crimson;
+	}
+}
+
+input, button { font-size: $info-font; }
+input:focus { 
+  outline: none; 
+  box-shadow: inset 0 -1px 0 0 crimson;
+}
+
+button {
+  border: none;
+  border-radius: 1px;
+
+	&:focus { outline: none; }
+}
+#info button {
+	margin-left: -$info-font;
+  padding: 0 .4rem .2rem;
+  background: white;
+  color: #017f9d;
+  box-shadow: 0 -6px 0 -4px white, 0 6px 0 -4px white, 0 0 0 2px;
+
+  &:hover,
+  &:focus { 
+	  text-decoration: underline;
+  	background: #ededed; 
+  }
+}
+
+#worldView nav {
+	z-index: 99;
+	position: absolute;
+	top: 10px;
+	right: 15px;
+}
+#worldView button {
+	display: block;
+	width: 1.8rem;
+	margin-bottom: 8px;
+	background: transparent;
+	color: #ddd;
+	box-shadow: 0 -6px 0 -4px black, 0 6px 0 -4px black, 0 0 0 2px;
+
+	&:hover,
+	&:focus { color: lighten($select-color, 10%); }
+}
+#worldView button[disabled="true"] {
+  color: #666;
+}
+
+
+
+/* SVG ------------------------------------------------------*/
+#worldView {
+  position: absolute;
+  top: 0;
+  left: $info-width;
+  width: calc(100vw - #{$info-width});
+  height: 100vh;
+  overflow: hidden;
+}
+
+svg { 
+  position: relative;
+  background-color: black;
+}
+
+text {
+  fill: white;
+  font-size: .4px;
+  text-anchor: middle;
+}
+
+.water { fill: #3e3e3e;}
+
+.land {
+  fill: #1a1a1a;
+  /*stroke-width: .05;*/
+  /*stroke: black;*/
+}
+
+.urban { fill: gold; }
+
+/*.regions { fill: black; }*/
+
+.city { 
+  stroke-width: .1;
+  stroke: white;
+  fill: none;
+}
+.country {
+  stroke-width: .1;
+  stroke: #999;
+  fill: none;
+  /*fill: #2b2b2b;*/
+}
+
+.meteor {
+  fill: rgba(0, 255, 245, 0.3);
+}
+.meteor.interest {
+  fill: rgba(255, 245, 0, 0.3);
+}
+
