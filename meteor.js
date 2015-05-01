@@ -7,6 +7,30 @@ var worldsvg = d3.select('#worldView').append('svg')
   .attr('height', height+'%')
   .attr('viewBox', '0 0 100 100')
 
+//zoom in by 20 percentage points
+var zoomIn = d3.select('.zoom-in').on('click', function() {
+  var zLevel = worldsvg.node().width.baseVal.valueInSpecifiedUnits + 20,
+      border = -100 * (zLevel - 100)/(2 * zLevel)
+  worldsvg
+    .attr('width', zLevel + '%')
+    .attr('height', zLevel + '%')
+    .style('transform', 'translate('+ border +'%,'+ border +'%)')
+  if (zLevel >= 300) d3.select(this).attr('disabled', true)
+  if (zLevel > 100) zoomOut.attr('disabled', null)
+})
+//zoom out by 20 percentage points
+var zoomOut = d3.select('.zoom-out').on('click', function() {
+  var zLevel = worldsvg.node().width.baseVal.valueInSpecifiedUnits - 20,
+      border = -100 * (zLevel - 100)/(2 * zLevel)
+  worldsvg
+    .attr('width', zLevel + '%')
+    .attr('height', zLevel + '%')
+    .style('transform', 'translate('+ border +'%,'+ border +'%)')
+  if (zLevel <= 100) d3.select(this).attr('disabled', true)
+  if (zLevel < 300) zoomIn.attr('disabled', null)
+})
+
+//Create Earth
 d3.json('earth.json', function(err, data) {
   if (err) console.error(err)
   createWorld(data)
@@ -113,7 +137,7 @@ function createWorld(world) {
         return d.properties ? d.properties.city : ''
       })
       .text(function(d) {
-        return d.properties ? d.properties.city : 'select a city'
+        return d.properties ? d.properties.city : 'choose a city'
       })
   cityForm.on('change', spin)
   worldsvg.append('path')
@@ -130,7 +154,7 @@ function createWorld(world) {
         return d.properties ? d.properties.name : ''
       })
       .text(function(d) {
-        return d.properties ? d.properties.name : 'select a country'
+        return d.properties ? d.properties.name : 'choose a country'
       })
   countryForm.on('change', spin)
   worldsvg.append('path')
@@ -169,10 +193,12 @@ function createWorld(world) {
   //ADD MOTION
 
   function spin(){
-    var loc = this.value,
-        parent = d3.select(this.parentNode),
+    var loc = this.value
+    if (!loc) return
+    var parent = d3.select(this.parentNode),
         geoType = parent.attr('id').replace('-form', ''),
         choose = parent.select('option'),
+        distanceForm = d3.select('#distance-form'),
         currentSpin = projection.rotate(),
         targetC, locCoords, feat, name
 
@@ -183,10 +209,16 @@ function createWorld(world) {
     if (geoType === 'city') {
       feat = cities.features
       name = 'city'
+      //reset country form, show distance form
+      d3.select('#country-form').node().reset()
+      distanceForm.classed('hidden', false)
     }
     else if (geoType === 'country') {
       feat = countries.features
       name = 'name'
+      //reset city form, hide distance form 
+      d3.select('#city-form').node().reset()
+      distanceForm.classed('hidden', true)
     }
     else console.error('Form ID unrecognized')
 
@@ -237,15 +269,15 @@ function createWorld(world) {
           //hide city  
           worldsvg.selectAll('.city')
             .classed('hidden', true)
-          //show meteorites inside border  
-          
         }
 
+        //show meteorites inside border
         var dInput = d3.select('input[name="distance"]').node(),
             unitSelect = distForm.select('select').node()
         return mapInfo(targetC, geoType, dInput.value, unitSelect.value)
 
-      }
+      } //end final cleanup 
+
       //set new rotation
       projection.rotate([
         projection.rotate()[0] + distance[0], 
@@ -268,6 +300,7 @@ function createWorld(world) {
   
   //get meteorite info for given location
   function mapInfo(loc, geoType, dist, units) {
+    if (!loc) return
     var polygon = loc.geometry.coordinates,
         dist = dist || 3
         name
@@ -279,7 +312,7 @@ function createWorld(world) {
     meteorites.forEach(function(meteorite) {
       var mLoc = meteorite.geometry.coordinates
       // if meteorite point is inside country polygon
-      d3.select('.'+meteorite.properties.name.replace(/\W/g, '') )
+      d3.select('.m'+meteorite.properties.id )
         .classed('interest', function(d) {
           var isInside = false
 
@@ -297,7 +330,6 @@ function createWorld(world) {
 
           else if (geoType === 'city') {
             if (GeoCoordDistance(polygon, mLoc, units) <= dist)
-            // if (Math.abs(polygon[0] - mLoc[0]) <= dist && Math.abs(polygon[1] - mLoc[1]) <= dist)
               isInside = true
           }
           return isInside
@@ -321,6 +353,7 @@ function createWorld(world) {
             "coordinates": [meteorite.reclong+0, meteorite.reclat+0]
           },
           "properties": {
+            "id": i,
             "name": meteorite.name,
             "mass": meteorite.mass+0,
             "year": meteorite.year
@@ -335,7 +368,8 @@ function createWorld(world) {
         .enter().append('path')
           .attr('d', meteorPath)
           .attr('class', function(d) {
-            return 'meteor '+d.properties.name.replace(/\W/g, '')
+            return 'meteor m'+d.properties.id
+            // return 'meteor '+d.properties.name.replace(/\W/g, '')
           })
           .append('title')
           .text(function(d) {

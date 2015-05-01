@@ -4,12 +4,13 @@
 <link href="meteor.css" type="text/css" rel="stylesheet">
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
 <body>
-  <section id="worldView"></section>
-  <nav>
+  <section id="info">
     <form id='city-form'></form>
+    <p class="menu">&ndash;OR&ndash;</p>
     <form id='country-form'></form>
-    <form id='distance-form'>
+    <form id='distance-form' class="hidden">
       <fieldset>
         <label>
           Meteorites within
@@ -23,6 +24,12 @@
       </fieldset>
     </form>
     <div class="info"></div>
-  </nav>
+  </section>
+  <section id="worldView">
+  	<nav>
+	  	<button type="button" class="zoom-in">&#43;</button>
+	  	<button type="button" class="zoom-out" disabled="true">&#45;</button>
+  	</nav>
+  </section>
 </body>
 <script src="meteoriteBundle.js"></script>
