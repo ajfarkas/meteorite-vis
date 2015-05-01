@@ -138,7 +138,7 @@ function createWorld(world) {
         return d.properties ? d.properties.city : ''
       })
       .text(function(d) {
-        return d.properties ? d.properties.city : 'choose a city'
+        return d.properties ? d.properties.city : 'CHOOSE A CITY'
       })
   cityForm.on('change', spin)
   worldsvg.append('path')
@@ -155,7 +155,7 @@ function createWorld(world) {
         return d.properties ? d.properties.name : ''
       })
       .text(function(d) {
-        return d.properties ? d.properties.name : 'choose a country'
+        return d.properties ? d.properties.name : 'CHOOSE A COUNTRY'
       })
   countryForm.on('change', spin)
   worldsvg.append('path')
@@ -361,7 +361,7 @@ function createWorld(world) {
           }
         }
       })
-
+      //Add meteorites to SVG
       var meteorG = worldsvg.append('g')
           .attr('class', 'meteorites')
       meteorG.selectAll('.meteor')
@@ -370,7 +370,6 @@ function createWorld(world) {
           .attr('d', meteorPath)
           .attr('class', function(d) {
             return 'meteor m'+d.properties.id
-            // return 'meteor '+d.properties.name.replace(/\W/g, '')
           })
           .append('title')
           .text(function(d) {
@@ -402,8 +401,7 @@ function GeoCoordDistance(start, end, units) {
   else return km
 }
 
-
-
+// TODO: fix geoCoordinate Distance func
 
 
 },{"point-in-polygon":2}],2:[function(require,module,exports){
