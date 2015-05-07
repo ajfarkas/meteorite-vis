@@ -173,8 +173,9 @@ function createWorld(world) {
 
   function regDistForm() {
    var dInput = d3.select('input[name="distance"]').node(),
-       cityElem = d3.select('.city')
-   // cityPath = earthPath.pointRadius(dInput.value/70)
+       cityElem = d3.select('.city'),
+       unitSelect = distForm.select('select').node(),
+       cityPath = earthPath.pointRadius(unitSelect.value === 'mi' ? dInput.value/100: dInput.value/161)
    //redraw city radius and meteorite styles
    if (!cityElem.classed('hidden') || !cityElem.attr('d')) {
      cityElem.attr('d', cityPath)
@@ -185,7 +186,6 @@ function createWorld(world) {
        if (citySelect.value === city.properties.city)
          return cityLoc = city
      })
-     var unitSelect = distForm.select('select').node()
      mapInfo(cityLoc, 'city', dInput.value, unitSelect.value)
    }
   }
@@ -389,9 +389,9 @@ function createWorld(world) {
 function GeoCoordDistance(start, end, units) {
   var r = 6371, //Earth r in km
       piRad = Math.PI / 180,
-      angle = (1 - Math.cos((end[0] - start[0]) * piRad))/2 + 
-        Math.cos(start[0] * piRad) * Math.cos(end[0] * piRad) * 
-        (1 - Math.cos((end[1] - start[1]) * piRad))/2;
+      angle = (1 - Math.cos((end[1] - start[1]) * piRad))/2 + 
+        Math.cos(start[1] * piRad) * Math.cos(end[1] * piRad) * 
+        (1 - Math.cos((end[0] - start[0]) * piRad))/2;
 
   var km = r * 2 * Math.asin(Math.sqrt(angle))
 
@@ -399,6 +399,4 @@ function GeoCoordDistance(start, end, units) {
     return km / 1.60934
   else return km
 }
-
-// TODO: fix geoCoordinate Distance func
 
