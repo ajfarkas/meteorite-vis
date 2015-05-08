@@ -94,16 +94,15 @@ p.menu { display: inline-block; }
 
 select, button {
 	cursor: pointer;
-}
-
-select {
-  background: white;
+  background-color: white;
   border: none;
   font-size: $info-font;
   color: $select-color;
 
+  &:hover,
 	&:focus {
-    text-decoration: underline;
+    background-color: $select-color;
+    color: white;
 	  outline: none;
 	}
 }
@@ -143,16 +142,12 @@ fieldset {
 	  overflow: hidden;
 	  margin-right: $info-font * -0.6;
 	}
-
-	& select :focus {
-		box-shadow: inset 0 -4px 0 0 crimson;
-	}
 }
 
-input, button { font-size: $info-font; }
+input { font-size: $info-font; }
 input:focus { 
   outline: none; 
-  box-shadow: inset 0 -1px 0 0 crimson;
+  box-shadow: inset 0 -1px 0 0 $select-color;
 }
 
 button {
@@ -160,7 +155,6 @@ button {
   border: none;
   border-radius: 1px;
 
-	&:focus { outline: none; }
 	&:active { top: 1px; }
 }
 #info button {
@@ -172,8 +166,7 @@ button {
 
   &:hover,
   &:focus { 
-	  text-decoration: underline;
-  	background: #ededed; 
+  	background: #f5e323; 
   }
 }
 
