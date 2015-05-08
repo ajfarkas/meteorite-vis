@@ -69,7 +69,7 @@ p.menu {
   left: 50%;
   transform: translateX(-50%);
   margin-left: 0;
-  margin-top: 1.0rem; }
+  margin-top: 1rem; }
 
 #country-form:after {
   content: '';
@@ -141,7 +141,7 @@ button {
 
 #info button {
   margin-left: -1.4rem;
-  padding: 0 .4rem .2rem;
+  padding: 0 0.4rem 0.2rem;
   background: white;
   color: #017f9d;
   box-shadow: 0 -6px 0 -4px white, 0 6px 0 -4px white, 0 0 0 2px; }
@@ -168,7 +168,26 @@ button {
 #worldView button[disabled="true"] {
   color: #666; }
 
-/* SVG ------------------------------------------------------*/
+/* GRAPHS ---------------------------------------------------------*/
+.sizes {
+  width: 423px;
+  height: 211.5px;
+  margin-left: 23.5px; }
+
+.histogram rect {
+  fill: #00cfc5; }
+.histogram line {
+  stroke-width: 0.5;
+  stroke: black; }
+.histogram text {
+  fill: black;
+  font-size: 0.6rem; }
+.histogram .domain {
+  fill: none;
+  stroke-width: 0.5;
+  stroke: black; }
+
+/* GLOBE SVG ------------------------------------------------------*/
 #worldView {
   position: absolute;
   top: 0;
@@ -176,10 +195,9 @@ button {
   width: calc(100vw - 470px);
   height: 100vh;
   overflow: hidden; }
-
-svg {
-  position: relative;
-  background-color: black; }
+  #worldView svg {
+    position: relative;
+    background-color: black; }
 
 text {
   fill: white;

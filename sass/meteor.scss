@@ -25,20 +25,20 @@ ul { list-style: none; }
 
 .title {
   margin-bottom: 10px;
-	padding: 0.4rem 0;
+	padding: rem(4) 0;
 	background-color: #e9ecec;;
   text-align: center;
 }
 h1 {
-  line-height: 3rem;
+  line-height: rem(30);
   font-family: 'Unica One', cursive;
   font-weight: 300;
-  font-size: 2.8rem;
+  font-size: rem(28);
   text-transform: uppercase;
 }
 h2 {
   font-weight: 300;
-  font-size: 1.3rem;
+  font-size: rem(13);
 }
 
 /* FORMS & BUTTONS ------------------------------------------------------*/
@@ -58,7 +58,7 @@ h2 {
 p.menu { 
   z-index: 2;
   position: relative;
-  padding: 0.2rem 0;
+  padding: rem(2) 0;
   background: $info-bg;
   font-size: $info-font * 6 / 7;
 }
@@ -69,7 +69,7 @@ p.menu { display: inline-block; }
 #country-form,
 #city-form { 
   position: relative;
-  min-width: calc(50% - 2rem);
+  min-width: calc(50% - #{rem(20)});
   min-height: $info-font * 1.5;
 }
 
@@ -78,17 +78,17 @@ p.menu { display: inline-block; }
   left: 50%;
   transform: translateX(-50%);
   margin-left: 0;
-  margin-top: 1.0rem;
+  margin-top: rem(10);
 }
 //hide stray marks
 #country-form:after {
   content: '';
   display: inline-block;
   position: relative;
-  left: -1.2rem;
+  left: rem(-12);
   top: 5px;
-  width: 1.4rem;
-  height: 2.1rem;
+  width: rem(14);
+  height: rem(21);
   background: white;
 }
 
@@ -134,7 +134,7 @@ fieldset {
 
 	&label { font-weight: 300; }
 	& input {
-	  width: 4.8rem;
+	  width: rem(48);
 	  margin-left: $info-font * 0.33;
 	  border: none;
 	  box-shadow: inset 0 -1px 0 0 black;
@@ -165,7 +165,7 @@ button {
 }
 #info button {
 	margin-left: -$info-font;
-  padding: 0 .4rem .2rem;
+  padding: 0 rem(4) rem(2);
   background: $info-bg;
   color: #017f9d;
   box-shadow: 0 -6px 0 -4px $info-bg, 0 6px 0 -4px $info-bg, 0 0 0 2px;
@@ -185,7 +185,7 @@ button {
 }
 #worldView button {
 	display: block;
-	width: 1.8rem;
+	width: rem(18);
 	margin-bottom: 8px;
 	background: transparent;
 	color: #ddd;
@@ -198,9 +198,36 @@ button {
   color: #666;
 }
 
+/* GRAPHS ---------------------------------------------------------*/
+
+.sizes {
+	width: $info-width * 0.9;
+	height: $info-width * 0.45;
+	margin-left: $info-width * 0.05;
+}
+
+.histogram {
+	rect { fill: #00cfc5; }
+
+	line {
+		stroke-width: 0.5;
+		stroke: black;
+	}
+
+	text { 
+		fill: black;
+	  font-size: rem(6);
+	}
+
+	.domain {
+	  fill: none;
+	  stroke-width: 0.5;
+	  stroke: black;
+	}
+}
 
 
-/* SVG ------------------------------------------------------*/
+/* GLOBE SVG ------------------------------------------------------*/
 #worldView {
   position: absolute;
   top: 0;
@@ -208,11 +235,11 @@ button {
   width: calc(100vw - #{$info-width});
   height: 100vh;
   overflow: hidden;
-}
 
-svg { 
-  position: relative;
-  background-color: black;
+	svg { 
+	  position: relative;
+	  background-color: black;
+	}
 }
 
 text {

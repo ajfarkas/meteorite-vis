@@ -58,7 +58,7 @@ function createWorld(world) {
   var meteorPath = d3.geo.path()
     .projection(projection)
     .pointRadius(function(d) {
-      return (parseInt(d.properties.mass) + '').length/20
+      return (parseInt(d.properties.mass) + '').length/16
     })
 
   // sun gradient
@@ -200,6 +200,8 @@ function createWorld(world) {
         choose = parent.select('option'),
         distanceForm = d3.select('#distance-form'),
         currentSpin = projection.rotate(),
+        dInput = d3.select('input[name="distance"]').node(),
+        unitSelect = distForm.select('select').node(),
         targetC, locCoords, feat, name
 
     //disable SELECT option
@@ -212,6 +214,7 @@ function createWorld(world) {
       //reset country form, show distance form
       d3.select('#country-form').node().reset()
       distanceForm.classed('hidden', false)
+      cityPath = earthPath.pointRadius(unitSelect.value === 'mi' ? dInput.value/100: dInput.value/161)
     }
     else if (geoType === 'country') {
       feat = countries.features
@@ -272,8 +275,6 @@ function createWorld(world) {
         }
 
         //show meteorites inside border
-        var dInput = d3.select('input[name="distance"]').node(),
-            unitSelect = distForm.select('select').node()
         return mapInfo(targetC, geoType, dInput.value, unitSelect.value)
 
       } //end final cleanup 
@@ -289,7 +290,7 @@ function createWorld(world) {
       // svg.selectAll('.urban')
       //   .attr('d', earthPath)
       worldsvg.select('.city')
-        .attr('d', earthPath)
+        .attr('d', cityPath)
       worldsvg.selectAll('.meteor')
         .attr('d', meteorPath)
 
@@ -336,54 +337,75 @@ function createWorld(world) {
         })
     }) //end meteorites forEach
 
+    //update meteor size histogram
+    makeHistogram('.sizes', d3.selectAll('.interest').data(), function(d){ 
+          return d.properties.mass })
+
   } //end mapInfo
 
   // get meteorites
-  d3.xhr('https://data.nasa.gov/resource/gh4g-9sfh.json?')
-    .header('X-App-Token', 'dDfZ8lS0kSxDD4os5DTIrdWAb')
-    .get(function(err, data) {
-      if (err) console.error(err)
-      meteorites = JSON.parse(data.response)
-      // convert to GeoJSON
-      meteorites.forEach(function(meteorite, i) {
-        meteorites[i] = {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [meteorite.reclong+0, meteorite.reclat+0]
-          },
-          "properties": {
-            "id": i,
-            "name": meteorite.name,
-            "mass": meteorite.mass+0,
-            "year": meteorite.year
+  function getMeteors(limit, offset, massMin, massMax, year) {
+    var query = "$where=reclong!='0.000000' AND reclat!='0.000000'"
+    if (massMin) query += ' AND mass >= ' + (massMin * 1000)
+    if (massMax) query += ' AND mass <= ' + (massMax * 1000)
+    if (limit) query += '&$limit=' + limit
+    if (offset)
+      query += '&$order=:id&$offset=' + (offset == 'random' ? Math.round(Math.random()*(34513 - limit)) : offset)
+    if (year) query += '&year='+(year ? year : 1800)+'-01-01T00:00:00'
+
+    d3.xhr('https://data.nasa.gov/resource/gh4g-9sfh.json?' + query)
+      .header('X-App-Token', 'dDfZ8lS0kSxDD4os5DTIrdWAb')
+      .get(function(err, data) {
+        if (err) console.error(err)
+          jsonData = data
+        meteorites = JSON.parse(data.response)
+        // convert to GeoJSON
+        meteorites.forEach(function(meteorite, i) {
+          meteorites[i] = {
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [+meteorite.reclong, +meteorite.reclat]
+            },
+            "properties": {
+              "id": i,
+              "name": meteorite.name,
+              "mass": +meteorite.mass,
+              "year": +meteorite.year || 'none'
+            }
           }
-        }
-      })
-      //Add meteorites to SVG
-      var meteorG = worldsvg.append('g')
-          .attr('class', 'meteorites')
-      meteorG.selectAll('.meteor')
-          .data(meteorites)
-        .enter().append('path')
-          .attr('d', meteorPath)
-          .attr('class', function(d) {
-            return 'meteor m'+d.properties.id
-          })
-          .append('title')
-          .text(function(d) {
-            return d.properties.name+': '+Math.round(d.properties.mass)/1000+'kg, '+d.properties.year.substr(0,4)
-          })
+        })
+        //Add meteorites to SVG
+        var meteorG = worldsvg.append('g')
+            .attr('class', 'meteorites')
+        var mGmeteors = meteorG.selectAll('.meteor')
+            .data(meteorites)
 
-      // var info = d3.select('.info').append('ul')
-      // info.selectAll('li')
-      //     .data(data)
-      //   .enter().append('li')
-      //     .text(function(d) {
-      //       return d.properties.name+': '+Math.round(d.properties.mass)/1000+'kg, '+d.properties.year.substr(0,4)
-      //     })
+        mGmeteors.enter().append('path')
+            .attr('d', meteorPath)
+            .attr('class', function(d) {
+              return 'meteor m'+d.properties.id
+            })
+            .append('title')
+            .text(function(d) {
+              return d.properties.name+': '+Math.round(d.properties.mass)/1000+'kg, '+d.properties.year.substr(0,4)
+            })
 
-    })// end get meteorites
+        mGmeteors.exit()
+            .remove()
+
+        // var info = d3.select('.info').append('ul')
+        // info.selectAll('li')
+        //     .data(data)
+        //   .enter().append('li')
+        //     .text(function(d) {
+        //       return d.properties.name+': '+Math.round(d.properties.mass)/1000+'kg, '+d.properties.year.substr(0,4)
+        //     })
+
+      }) //end xhr get
+  }// end get meteors
+
+  getMeteors(500, null, 10, 100, null)
 }// end createWorld
 
 function GeoCoordDistance(start, end, units) {
@@ -399,4 +421,103 @@ function GeoCoordDistance(start, end, units) {
     return km / 1.60934
   else return km
 }
+
+function makeHistogram(hook, data, accessor) {
+  var dMin = d3.min(data, accessor) || 0,
+      dMax = d3.max(data, accessor) || 1
+
+  var x = d3.scale.linear()
+    .domain([dMin, dMax])
+    .range([0, 160])
+    .nice()
+
+  var hist = d3.layout.histogram()
+    .value(accessor)
+    .bins(x.ticks())
+    (data)
+
+  var y = d3.scale.linear()
+    .domain([0, d3.max(hist, function(d) { return d.y }) ])
+    .range([70, 0])
+    .nice()
+
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient('bottom')
+    .tickSize(2)
+    .tickFormat(d3.format('s'), d3.formatPrefix(1e3))
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient('left')
+    .tickSize(3)
+    .tickValues(y.domain()[1] < 10 ? d3.range(y.domain()[1] + 1) : null)
+    .tickFormat(d3.format('f'))
+
+  if (!d3.select(hook).select('.plot').node()) {
+    var hSVG = d3.select(hook).append('svg')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('viewBox', '0 0 200 100')
+      .attr('class', 'histogram')
+
+    var plot = hSVG.append('g')
+      .attr('class', 'plot')
+      .attr('transform', 'translate(20, 10)')
+
+  }
+  else var plot = d3.select(hook).select('.plot')
+
+  
+
+  var bar = plot.selectAll('.bar')
+      .data(hist)
+  bar.enter().append('rect')
+      .attr('class', 'bar')
+  bar.attr('transform', function(d) {
+        return 'translate('+x(d.x)+', '+y(d.y)+')'
+      })
+      .attr('x', 1)
+      .attr('width', function(d) { return x(hist[0].x + hist[0].dx) - 2 })
+      .attr('height', function(d) { return y(0) - y(d.y) })
+  bar.exit().remove()
+
+  if (data.length < 2 && !plot.selectAll('.no-data').node()) {
+    return plot.append('text')
+      .attr('class', 'no-data')
+      .attr('transform', 'translate(80, 40)')
+      .text('DATA UNAVAILABLE')
+  }
+  else if (data.length >=2) plot.select('.no-data').remove()
+
+  plot.select('.x').remove()
+  plot.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0, '+y(0)+')')
+      .call(xAxis)
+    .append('text')
+      .attr('text-anchor', 'middle')
+      .attr('x', x(dMax)/2)
+      .attr('dy', '2.7em')
+      .text('mass(g)')
+
+  plot.select('.y').remove()
+  plot.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+    .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .attr('x', -y(0)/2)
+      .attr('dy', '-2.3em')
+      .text('# meteorites')
+
+  // plot.append('text')
+  //     .attr('dy', '.35em')
+  //     .attr('y', 1)
+  //     .attr('x', x(hist[0].dx)/2)
+  //     .attr('text-anchor', 'middle')
+  //     .text(function(d) { return d.y })
+    
+}
+
 
