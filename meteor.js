@@ -1,5 +1,5 @@
 window.inside = require('point-in-polygon')
-var world, meteorites, earth
+window.world; window.meteorites; window.earth
 
 //Create Earth
 d3.json('earth.json', function(err, data) {
@@ -332,6 +332,7 @@ window.makeHistogram = function(hook, data, accessor) {
     .scale(y)
     .orient('left')
     .tickSize(3)
+    .tickPadding(0)
     .tickValues(y.domain()[1] < 10 ? d3.range(y.domain()[1] + 1) : null)
     .tickFormat(d3.format('f'))
 
@@ -395,12 +396,12 @@ window.makeHistogram = function(hook, data, accessor) {
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
       .attr('x', -y(0)/2)
-      .attr('dy', '-2.3em')
+      .attr('dy', '-2.7em')
       .text('# meteorites')
 
-  // d3.selectAll('.bar').on('click', function(d, i) {
-  //   getMeteors(500, null, d.x, d.x + d.dx, null)
-  // })    
+  d3.selectAll('.bar').on('click', function(d, i) {
+    meteorites.getMeteors(world, 500, null, d.x/1000, (d.x + d.dx)/1000, null)
+  })    
 }
 
 

@@ -6,7 +6,7 @@ Meteorites = function() {
 //get meteorite info for given location
 Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
   if (!loc) return
-  var polygon = loc.geometry.coordinates,
+  var polygon = (geoType === 'world' ? null : loc.geometry.coordinates),
       dist = dist || 3
       name
   //topojson naming quirk
@@ -21,6 +21,8 @@ Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
       .classed('interest', function(d) {
         var isInside = false
 
+        if (geoType === 'world')
+          isInside = true
         if (geoType === 'country') {
           //account for multiple layers of arrays in topojson
           if (inside(mLoc, polygon)) return isInside = true
@@ -32,7 +34,6 @@ Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
             if (isInside) return
           })
         }
-
         else if (geoType === 'city') {
           if (GeoCoordDistance(polygon, mLoc, units) <= dist)
             isInside = true
@@ -47,7 +48,7 @@ Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
 
 } //end mapInfo
 
-Meteorites.prototype.getMeteors = function(world, limit, offset, massMin, massMax, year) {
+Meteorites.prototype.getMeteors = function(scope, limit, offset, massMin, massMax, year) {
   var self = this,
       query = "$where=reclong!='0.000000' AND reclat!='0.000000'"
   if (massMin) query += ' AND mass >= ' + (massMin * 1000)
@@ -61,6 +62,8 @@ Meteorites.prototype.getMeteors = function(world, limit, offset, massMin, massMa
     .header('X-App-Token', 'dDfZ8lS0kSxDD4os5DTIrdWAb')
     .get(function(err, data) {
       if (err) console.error(err)
+      //clear list
+      self.list = []
       // convert to GeoJSON
       JSON.parse(data.response).forEach(function(meteorite, i) {
         self.list[i] = {
@@ -78,27 +81,34 @@ Meteorites.prototype.getMeteors = function(world, limit, offset, massMin, massMa
         }
       })
 
-      self.addMeteorites(self.list, world)
+      self.addMeteorites(self.list, scope)
     }) //end xhr get
 } // end get meteors
 
-Meteorites.prototype.addMeteorites = function(meteorites, world) {
-  //Add meteorites to SVG
-  var meteorG = world.svg.append('g')
+Meteorites.prototype.addMeteorites = function(meteorites, scope) {
+  //Add meteorites to SVG if necessary
+  if (!scope.svg.select('.meteorites').node() ) {
+    var meteorG = scope.svg.append('g')
       .attr('class', 'meteorites')
-  var mGmeteors = meteorG.selectAll('.meteor')
-      .data(meteorites)
+  }
+  else meteorG = scope.svg.select('.meteorites')
 
-  mGmeteors.enter().append('path')
-      .attr('d', world.meteorPath)
+  var meteors = meteorG.selectAll('.meteor')
+    .data(meteorites)
+
+  meteors.enter().append('path')
+    .attr('class', 'meteor')
+  meteors.attr('d', scope.meteorPath)
       .attr('class', function(d) {
         return 'meteor m'+d.properties.id
       })
-      .append('title')
-      .text(function(d) {
-        return d.properties.name+': '+Math.round(d.properties.mass)/1000+'kg, '+d.properties.year.substr(0,4)
-      })
+    .append('title')
+    .text(function(d) {
+      return d.properties.name+': '+Math.round(d.properties.mass)/1000+'kg, '+d.properties.year.substr(0,4)
+    })
 
-  mGmeteors.exit()
-      .remove()
+  meteors.exit()
+    .remove()
+
+  this.mapInfo(true, 'world')
 }

@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 window.inside = require('point-in-polygon')
-var world, meteorites, earth
+window.world; window.meteorites; window.earth
 
 //Create Earth
 d3.json('earth.json', function(err, data) {
@@ -333,6 +333,7 @@ window.makeHistogram = function(hook, data, accessor) {
     .scale(y)
     .orient('left')
     .tickSize(3)
+    .tickPadding(0)
     .tickValues(y.domain()[1] < 10 ? d3.range(y.domain()[1] + 1) : null)
     .tickFormat(d3.format('f'))
 
@@ -396,12 +397,12 @@ window.makeHistogram = function(hook, data, accessor) {
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
       .attr('x', -y(0)/2)
-      .attr('dy', '-2.3em')
+      .attr('dy', '-2.7em')
       .text('# meteorites')
 
-  // d3.selectAll('.bar').on('click', function(d, i) {
-  //   getMeteors(500, null, d.x, d.x + d.dx, null)
-  // })    
+  d3.selectAll('.bar').on('click', function(d, i) {
+    meteorites.getMeteors(world, 500, null, d.x/1000, (d.x + d.dx)/1000, null)
+  })    
 }
 
 

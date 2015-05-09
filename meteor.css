@@ -28,7 +28,7 @@ ul {
 
 h1 {
   line-height: 3rem;
-  font-family: 'Unica One', cursive;
+  font-family: Unica One, Helvetica Neue, sans-serif;
   font-weight: 300;
   font-size: 2.8rem;
   text-transform: uppercase; }
@@ -50,7 +50,8 @@ h2 {
 p.menu {
   z-index: 2;
   position: relative;
-  padding: 0.2rem 0;
+  margin: 0 -0.4rem;
+  padding: 0.2rem 0.4rem;
   background: white;
   font-size: 1.2rem; }
 
@@ -75,9 +76,9 @@ p.menu {
   content: '';
   display: inline-block;
   position: relative;
-  left: -1.2rem;
+  left: -1.5rem;
   top: 5px;
-  width: 1.4rem;
+  width: 1.5rem;
   height: 2.1rem;
   background: white; }
 
@@ -92,15 +93,19 @@ select, button {
     color: white;
     outline: none; }
 
+select {
+  border-radius: 4px; }
+
 form:nth-last-of-type(n+2) select {
   width: 17.444rem;
-  box-shadow: inset -14px 0 0 0 white, inset -15px 0 0 0px, inset 0 0 0 1px; }
+  box-shadow: inset -15px 0 0 0 white, inset -16px 0 0 0px, inset 0 0 0 1px; }
 
 #city-form select {
   position: relative;
   left: calc(100% + 14px - 1.4rem * 12.46); }
 
 #distance-form select {
+  min-width: 4.7rem;
   box-shadow: -8px 0 0 0 white, inset 1px 0, inset -19px 0 0 white, inset -20px 0, inset 0 0 0 1px; }
 
 option[value=""] {
@@ -112,13 +117,12 @@ fieldset {
     font-weight: 300; }
   fieldset input {
     width: 4.8rem;
-    margin-left: 0.462rem;
     border: none;
     box-shadow: inset 0 -1px 0 0 black;
     text-align: right;
     /*hide arrows*/
     overflow: hidden;
-    margin-right: -0.84rem; }
+    margin-right: -0.7rem; }
 
 input {
   font-size: 1.4rem; }
@@ -135,7 +139,7 @@ button {
     top: 1px; }
 
 #info button {
-  margin-left: -1.4rem;
+  margin-left: -1.7rem;
   padding: 0 0.4rem 0.2rem;
   background: white;
   color: #017f9d;
@@ -164,9 +168,9 @@ button {
 
 /* GRAPHS ---------------------------------------------------------*/
 .sizes {
-  width: 423px;
-  height: 211.5px;
-  margin-left: 23.5px; }
+  width: 352.5px;
+  height: 176.25px;
+  margin: 10px auto 0; }
 
 .histogram rect {
   fill: #00cfc5; }

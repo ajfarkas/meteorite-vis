@@ -31,7 +31,7 @@ ul { list-style: none; }
 }
 h1 {
   line-height: rem(30);
-  font-family: 'Unica One', cursive;
+  font-family: Unica One, Helvetica Neue, sans-serif;
   font-weight: 300;
   font-size: rem(28);
   text-transform: uppercase;
@@ -58,7 +58,8 @@ h2 {
 p.menu { 
   z-index: 2;
   position: relative;
-  padding: rem(2) 0;
+  margin: 0 rem(-4);
+  padding: rem(2) rem(4);
   background: $info-bg;
   font-size: $info-font * 6 / 7;
 }
@@ -85,9 +86,9 @@ p.menu { display: inline-block; }
   content: '';
   display: inline-block;
   position: relative;
-  left: rem(-12);
+  left: rem(-15);
   top: 5px;
-  width: rem(14);
+  width: rem(15);
   height: rem(21);
   background: white;
 }
@@ -106,11 +107,12 @@ select, button {
 	  outline: none;
 	}
 }
+select { border-radius: 4px; }
 form:nth-last-of-type(n+2) select {
   width: $info-font * 12.46;
   box-shadow: 
-  	inset -14px 0 0 0 $info-bg, //mask right
-  	inset -15px 0 0 0px, //right border
+  	inset -15px 0 0 0 $info-bg, //mask right
+  	inset -16px 0 0 0px, //right border
   	inset 0 0 0 1px; //other borders
 }
 #city-form select{
@@ -118,6 +120,7 @@ form:nth-last-of-type(n+2) select {
 	left: calc(100% + 14px - #{$info-font} * 12.46);
 }
 #distance-form select {
+	min-width: rem(47);
   box-shadow: 
   	-8px 0 0 0 $info-bg, //mask ##
   	inset 1px 0, //left border
@@ -134,13 +137,13 @@ fieldset {
 	&label { font-weight: 300; }
 	& input {
 	  width: rem(48);
-	  margin-left: $info-font * 0.33;
+	  // margin-left: rem(-0.5);
 	  border: none;
 	  box-shadow: inset 0 -1px 0 0 black;
 	  text-align: right;
 	  /*hide arrows*/
 	  overflow: hidden;
-	  margin-right: $info-font * -0.6;
+	  margin-right: rem(-7);
 	}
 }
 
@@ -158,7 +161,7 @@ button {
 	&:active { top: 1px; }
 }
 #info button {
-	margin-left: -$info-font;
+	margin-left: -$info-font - 0.3;
   padding: 0 rem(4) rem(2);
   background: $info-bg;
   color: #017f9d;
@@ -194,9 +197,9 @@ button {
 /* GRAPHS ---------------------------------------------------------*/
 
 .sizes {
-	width: $info-width * 0.9;
-	height: $info-width * 0.45;
-	margin-left: $info-width * 0.05;
+	width: $info-width * 0.75;
+	height: $info-width * 0.375;
+	margin: 10px auto 0;
 }
 
 .histogram {
