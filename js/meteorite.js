@@ -1,4 +1,5 @@
-// get meteorites
+var inside = require('point-in-polygon')
+
 Meteorites = function() { 
   this.list = []
 }
@@ -110,5 +111,17 @@ Meteorites.prototype.addMeteorites = function(meteorites, scope) {
   meteors.exit()
     .remove()
 
-  this.mapInfo(true, 'world')
+  var cityVal = d3.select('#city-form').select('select').node().value,
+      countryVal = d3.select('#country-form').select('select').node().value  
+  if (cityVal) {
+    var radius = d3.select('input[name=distance]').node().value,
+        dUnits = d3.select('#distance-form').select('select').node().value
+    this.mapInfo(d3.select('.city').data()[0], 'city', radius, dUnits)
+  }
+  else if (cityVal)
+    this.mapInfo(d3.select('.country').data()[0], 'country')
+  else 
+    this.mapInfo(true, 'world')
 }
+
+module.exports = Meteorites

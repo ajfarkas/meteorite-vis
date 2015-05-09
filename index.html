@@ -13,13 +13,26 @@
 	  	<h1>Meteorite Landings</h1>
 	  	<h2>via NASA &amp; The Meteoritical Society</h2>
   	</div>
-    <form id='city-form'></form>
+    <form id="city-form"></form>
     <p class="menu">&ndash;OR&ndash;</p>
-    <form id='country-form'></form>
-    <form id='distance-form' class="hidden">
+    <form id="country-form"></form>
+    <!-- <form id="getMeteors-form">
+    	<fieldset>
+	    	<label>
+	    		Show
+	    		<input type="range" min="10" max="1000" value="300"></input>
+	    		meteorites, between
+	    		<input type="number" name="min-mass" value="null"></input>
+	    		and
+	    		<input type="number" name="max-mass" value="null"></input>
+	    		mass.
+    		</label>
+    	</fieldset>
+    </form> -->
+    <form id="distance-form" class="hidden">
       <fieldset>
         <label>
-          Meteorites within
+          within
           <input type="number" name="distance" value="500" placeholder="500"></input>
           <select>
             <option value="mi" selected="true">mi</option>
@@ -42,7 +55,7 @@
     <div class="more-stuff">
     	<p>This is an ongoing project that I update as I work on it. Expect misaligned styles and imperfect functionality. Check back often to see this visualization improve.</p>
     </div>
-    <!-- <h6>find the original dataset and more at <a href="https://data.nasa.gov/">NASA's Data Portal</a></h6> -->
+    <h6>find the original dataset and more at <a href="https://data.nasa.gov/">NASA's Data Portal</a></h6>
   </section>
 
   <section id="worldView">
@@ -52,5 +65,4 @@
   	</nav>
   </section>
 </body>
-<script src="meteoriteBundle.js"></script>
-<script src="Meteorites.js"></script>
+<script src="js/meteorApp.js"></script>

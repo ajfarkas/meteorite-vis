@@ -40,6 +40,12 @@ h2 {
   font-weight: 300;
   font-size: rem(13);
 }
+h6 {
+	font-weight: 400;
+	font-size: rem(11);
+	
+	& a { text-decoration: underline; }
+}
 
 /* FORMS & BUTTONS ------------------------------------------------------*/
 #info {
