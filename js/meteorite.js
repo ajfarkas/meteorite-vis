@@ -59,6 +59,9 @@ Meteorites.prototype.getMeteors = function(scope, limit, offset, massMin, massMa
     query += '&$order=:id&$offset=' + (offset == 'random' ? Math.round(Math.random()*(34513 - limit)) : offset)
   if (year) query += '&year='+year+'-01-01T00:00:00'
 
+  if (self.query && query == self.query) return
+  else self.query = query
+
   d3.xhr('https://data.nasa.gov/resource/gh4g-9sfh.json?' + query)
     .header('X-App-Token', 'dDfZ8lS0kSxDD4os5DTIrdWAb')
     .get(function(err, data) {

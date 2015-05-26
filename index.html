@@ -19,21 +19,20 @@
     <form id="city-form"></form>
     <p class="menu">&ndash;OR&ndash;</p>
     <form id="country-form"></form>
-    <!-- <form id="getMeteors-form">
+    <form id="getMeteors-form">
     	<fieldset>
 	    	<label>
-	    		Show
-	    		<input type="range" min="10" max="1000" value="300"></input>
-	    		meteorites, between
-	    		<input type="number" name="min-mass" value="null"></input>
-	    		and
-	    		<input type="number" name="max-mass" value="null"></input>
-	    		mass.
+	    		show <span class="range-display">0300</span> meteorites
+          &minus;<input type="range" name="total-meteors" min="10" max="1000" value="300" step="10"></input> &plus;
+          <br/>
+          between
+	    		<input type="number" name="min-mass" value="0"></input>g and
+	    		<input type="number" name="max-mass" value="10000"></input>g
     		</label>
     	</fieldset>
-    </form> -->
-    <form id="distance-form" class="hidden">
-      <fieldset>
+    </form>
+    <form id="distance-form">
+      <fieldset class="hidden">
         <label>
           within
           <input type="number" name="distance" value="500" placeholder="500"></input>
@@ -42,8 +41,8 @@
             <option value="km">km</option>
           </select> 
         </label>
-        <button type="button">update</button>
       </fieldset>
+      <button type="button">update</button>
     </form>
     <!-- <form id='goto'>
     	<fieldset>

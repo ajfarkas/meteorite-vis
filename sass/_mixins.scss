@@ -1,1 +1,7 @@
 @function rem($size) { @return ($size/10) + rem; } 
+
+@mixin appearance($appear) {
+  -webkit-appearance: $appear;
+     -moz-appearance: $appear;
+          appearance: $appear;
+}

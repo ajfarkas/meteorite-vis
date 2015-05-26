@@ -133,3 +133,15 @@ makeHistogram = function(hook, data, accessor) {
     meteorites.getMeteors(world, 500, null, d.x/1000, (d.x + d.dx)/1000, null)
   })    
 }
+
+readInputs = function() {
+  var meteorsShow = d3.select('input[name=total-meteors]')
+      number = meteorsShow.node().value,
+      display = d3.select('.range-display'),
+      minMass = d3.select('input[name=min-mass]').node().value,
+      maxMass = d3.select('input[name=max-mass]').node().value
+  meteorsShow.on('change', function() {
+    display.text( ('000'+number).substr(-4) )
+  })
+}
+

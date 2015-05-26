@@ -130,27 +130,50 @@ World.prototype.makeMenus = function() {
   self.svg.append('path')
     .attr('class', 'country')
 
-  //change radius of meteorites of interest
+  //connect meteorite number input to display
+  self.meteorsShow = d3.select('input[name=total-meteors]')
+    .on('change', function() {
+      d3.select('.range-display').text( ('000'+self.meteorsShow.node().value).substr(-4) )
+    })
+  
   self.distForm = d3.select('#distance-form')
-  var distBtn = self.distForm.select('button')
-    .on('click', function() { self.regDistForm.call(self) })
-  self.distForm.select('input').on('keypress', function() { 
-    if(d3.event.keyCode == 13) {
-      self.regDistForm.call(self)
-      d3.event.preventDefault() 
-    }
-  })
+  self.submitBtn = self.distForm.select('button')
+    .on('click', function() { self.regInputUpdate.call(self) })
+  //change radius of meteorites of interest
+  
+  self.distForm.on('keypress', function() { 
+      if (d3.event.keyCode == 13) {
+        if (d3.event.target == self.submitBtn.node())
+          self.regInputUpdate.call(self)
+        else
+          self.regDistance.call(self)
+        d3.event.preventDefault()
+      }
+    })
+  //change selected meteorites on distance form change
+  self.distForm.select('input').on('change', function() { self.regDistance.call(self) })
+  self.distForm.select('select').on('change', function() { self.regDistance.call(self) })
 }
 
-World.prototype.regDistForm = function() {
-  var dInput = d3.select('input[name="distance"]').node(),
+World.prototype.regInputUpdate = function() {
+  var meteorsShow = d3.select('input[name=total-meteors]'),
+      number = meteorsShow.node().value,
+      display = d3.select('.range-display'),
+      minMass = d3.select('input[name=min-mass]').node().value,
+      maxMass = d3.select('input[name=max-mass]').node().value
+
+  meteorites.getMeteors(this, number, null, minMass, maxMass, null)
+}
+
+World.prototype.regDistance = function() {
+  var distance = d3.select('input[name="distance"]').node().value,
       cityElem = d3.select('.city'),
-      unitSelect = this.distForm.select('select').node(),
-      cityPath = this.earthPath.pointRadius(unitSelect.value === 'mi' ? dInput.value/100: dInput.value/161)
+      dUnits = this.distForm.select('select').node().value,
+      cityPath = this.earthPath.pointRadius(dUnits === 'mi' ? distance/100: distance/161)
   //redraw city radius and meteorite styles
   if (!cityElem.classed('hidden') || !cityElem.attr('d')) {
     cityElem.attr('d', cityPath)
-    meteorites.mapInfo(cityElem.data()[0], 'city', dInput.value, unitSelect.value)
+    meteorites.mapInfo(cityElem.data()[0], 'city', distance, dUnits)
   }
 }
 
@@ -176,7 +199,7 @@ World.prototype.spin = function() {
     name = 'city'
     //reset country form, show distance form
     d3.select('#country-form').node().reset()
-    self.distForm.classed('hidden', false)
+    self.distForm.select('fieldset').classed('hidden', false)
     self.cityPath = self.earthPath.pointRadius(unitSelect.value === 'mi' ? dInput.value/100: dInput.value/161)
   }
   else if (geoType === 'country') {
@@ -184,7 +207,7 @@ World.prototype.spin = function() {
     name = 'name'
     //reset city form, hide distance form 
     d3.select('#city-form').node().reset()
-    self.distForm.classed('hidden', true)
+    self.distForm.select('fieldset').classed('hidden', true)
   }
   else console.error('Form ID unrecognized')
 
@@ -265,7 +288,6 @@ World.prototype.spin = function() {
       .attr('d', self.cityPath)
     //meteors not rotated until final pass
     
-
     i++
   }, 16)
 
