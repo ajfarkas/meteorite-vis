@@ -188,7 +188,7 @@ Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
 
 Meteorites.prototype.getMeteors = function(scope, limit, offset, massMin, massMax, year) {
   var self = this,
-      query = "$where=reclong!='0.000000' AND reclat!='0.000000'"; console.log(query)
+      query = "$where=reclong!='0.000000' AND reclat!='0.000000'"
   if (massMin) query += ' AND mass >= ' + (massMin * 1000)
   if (massMax) query += ' AND mass <= ' + (massMax * 1000)
   if (limit) query += '&$limit=' + limit
