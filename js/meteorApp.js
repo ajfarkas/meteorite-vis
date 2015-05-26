@@ -188,7 +188,7 @@ Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
 
 Meteorites.prototype.getMeteors = function(scope, limit, offset, massMin, massMax, year) {
   var self = this,
-      query = "$where=reclong!='0.000000' AND reclat!='0.000000'"
+      query = "$where=reclong!='0.000000' AND reclat!='0.000000'"; console.log(query)
   if (massMin) query += ' AND mass >= ' + (massMin * 1000)
   if (massMax) query += ' AND mass <= ' + (massMax * 1000)
   if (limit) query += '&$limit=' + limit
@@ -255,7 +255,7 @@ Meteorites.prototype.addMeteorites = function(meteorites, scope) {
         dUnits = d3.select('#distance-form').select('select').node().value
     this.mapInfo(d3.select('.city').data()[0], 'city', radius, dUnits)
   }
-  else if (cityVal)
+  else if (countryVal)
     this.mapInfo(d3.select('.country').data()[0], 'country')
   else 
     this.mapInfo(true, 'world')
@@ -478,6 +478,9 @@ World.prototype.spin = function() {
   //hide country
   self.svg.selectAll('.country')
     .classed('hidden', true)
+  //hide meteors
+  self.svg.selectAll('.meteor')
+    .classed('hidden', true)
 
   //reset interval loop
   var i = 0;  
@@ -485,6 +488,12 @@ World.prototype.spin = function() {
   var travel = setInterval( function(){
     if (i >= 30){
       clearInterval(travel)
+
+      //rotate and show all meteors
+      self.svg.selectAll('.meteor')
+        .attr('d', self.meteorPath)
+        .classed('hidden', false)
+
       if (geoType === 'city') {
         //draw/show city
         self.svg.selectAll('.city')
@@ -520,8 +529,8 @@ World.prototype.spin = function() {
     //   .attr('d', earthPath)
     self.svg.select('.city')
       .attr('d', self.cityPath)
-    self.svg.selectAll('.meteor')
-      .attr('d', self.meteorPath)
+    //meteors not rotated until final pass
+    
 
     i++
   }, 16)

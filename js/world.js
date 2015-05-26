@@ -212,6 +212,9 @@ World.prototype.spin = function() {
   //hide country
   self.svg.selectAll('.country')
     .classed('hidden', true)
+  //hide meteors
+  self.svg.selectAll('.meteor')
+    .classed('hidden', true)
 
   //reset interval loop
   var i = 0;  
@@ -219,6 +222,12 @@ World.prototype.spin = function() {
   var travel = setInterval( function(){
     if (i >= 30){
       clearInterval(travel)
+
+      //rotate and show all meteors
+      self.svg.selectAll('.meteor')
+        .attr('d', self.meteorPath)
+        .classed('hidden', false)
+
       if (geoType === 'city') {
         //draw/show city
         self.svg.selectAll('.city')
@@ -254,8 +263,8 @@ World.prototype.spin = function() {
     //   .attr('d', earthPath)
     self.svg.select('.city')
       .attr('d', self.cityPath)
-    self.svg.selectAll('.meteor')
-      .attr('d', self.meteorPath)
+    //meteors not rotated until final pass
+    
 
     i++
   }, 16)

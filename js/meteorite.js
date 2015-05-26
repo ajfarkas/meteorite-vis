@@ -51,7 +51,7 @@ Meteorites.prototype.mapInfo = function(loc, geoType, dist, units) {
 
 Meteorites.prototype.getMeteors = function(scope, limit, offset, massMin, massMax, year) {
   var self = this,
-      query = "$where=reclong!='0.000000' AND reclat!='0.000000'"
+      query = "$where=reclong!='0.000000' AND reclat!='0.000000'"; console.log(query)
   if (massMin) query += ' AND mass >= ' + (massMin * 1000)
   if (massMax) query += ' AND mass <= ' + (massMax * 1000)
   if (limit) query += '&$limit=' + limit
@@ -118,7 +118,7 @@ Meteorites.prototype.addMeteorites = function(meteorites, scope) {
         dUnits = d3.select('#distance-form').select('select').node().value
     this.mapInfo(d3.select('.city').data()[0], 'city', radius, dUnits)
   }
-  else if (cityVal)
+  else if (countryVal)
     this.mapInfo(d3.select('.country').data()[0], 'country')
   else 
     this.mapInfo(true, 'world')
